@@ -23,7 +23,7 @@ export interface PdfResponse {
     id: string;
     sourceUrl: string;
     pdfUrl: string;
-    thumbnailUrl: string;
+    thumbnailUrl: string | null;
     status: PdfStatus;
     createdAt: Date;
     updatedAt: Date;
