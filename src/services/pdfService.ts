@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import {Pdf, PdfStatus} from '../models/pdf';
+import {Pdf, PdfResponse, PdfStatus} from '../models/pdf';
 import {FileStorageFactory} from './fileStorage/fileStorageFactory';
 import {MetadataStorageFactory} from './metadataStorage/metadataStorageFactory';
 import {getConfig} from '../config/config';
@@ -76,10 +76,10 @@ export class PDFService {
         return this.metadataStorage.findDuplicatePDFByHash(hash);
     }
 
-    transformPDFToResponse(pdf: Pdf, baseUrl: string): any {
+    transformPDFToResponse(pdf: Pdf, baseUrl: string): PdfResponse {
         return {
             id: pdf.id,
-            originalUrl: pdf.sourceUrl,
+            sourceUrl: pdf.sourceUrl,
             pdfUrl: this.fileStorage.getFileUrl(pdf.fileName, 'pdf', baseUrl),
             thumbnailUrl: pdf.status === PdfStatus.Completed
                 ? this.fileStorage.getFileUrl(pdf.thumbnailName, 'thumbnail', baseUrl)

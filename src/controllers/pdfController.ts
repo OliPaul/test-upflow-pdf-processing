@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { PDFService } from '../services/pdfService';
 import { createPDFQueue, PDFJobData } from '../queue/pdfQueue';
 import Bull from 'bull';
+import {Pdf} from "../models/pdf";
 
 export class PDFController {
     private pdfService: PDFService;
@@ -25,7 +26,7 @@ export class PDFController {
                 return;
             }
 
-            const existingPdf = await this.pdfService.findDuplicatePDFByUrl(url);
+            const existingPdf: Pdf | null = await this.pdfService.findDuplicatePDFByUrl(url);
             if (existingPdf) {
                 const response = this.pdfService.transformPDFToResponse(
                     existingPdf,
