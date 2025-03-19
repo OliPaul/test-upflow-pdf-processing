@@ -118,7 +118,7 @@ npm start
 npm run start:worker
 ```
 
-### Using Docker Compose
+### Using Docker Compose (Encountered issues with Canvas)
 
 ```bash
 docker-compose up -d
@@ -132,12 +132,12 @@ The microservice uses two main abstractions:
 
 1. FileStorage: Interface for file storage
     - `LocalFileStorage`: Local implementation (default)
-    - `S3FileStorage`: Stub for AWS S3 implementation
+    - `S3FileStorage`: Stub for AWS S3 implementation (not implemented)
 
 2. MetadataStorage: Interface for metadata storage
     - `InMemoryMetadataStorage`: In-memory implementation
     - `RedisMetadataStorage`: Redis implementation (default)
-    - `DbMetadataStorage`: Stub for database implementation
+    - `DbMetadataStorage`: Stub for database implementation (not implemented)
 
 ### Asynchronous Processing
 
@@ -146,3 +146,10 @@ Processing is performed asynchronously:
 2. A task is added to the Bull/Redis queue
 3. One or more workers process tasks in the background
 4. The client can be notified via webhook when processing is complete
+
+### Future Improvements
+
+- Add authentication and rate limiting
+- Support multiple thumbnail sizes and formats
+- Implement cloud storage options (AWS S3, etc.)
+- Implement comprehensive test coverage
