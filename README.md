@@ -116,6 +116,9 @@ npm start
 
 # Start the worker
 npm run start:worker
+
+# Install Redis and start server on local
+redis-server
 ```
 
 ### Using Docker Compose (Encountered issues with Canvas)
