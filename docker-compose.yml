@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      args:
+        - RUN_MODE=api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST=0.0.0.0
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - FILE_STORAGE_TYPE=local
+      - METADATA_STORAGE_TYPE=redis
+      - QUEUE_CONCURRENCY=2
+    volumes:
+      - pdf_storage:/app/storage
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      args:
+        - RUN_MODE=worker
+    environment:
+      - NODE_ENV=production
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - FILE_STORAGE_TYPE=local
+      - METADATA_STORAGE_TYPE=redis
+      - QUEUE_CONCURRENCY=5
+    volumes:
+      - pdf_storage:/app/storage
+    depends_on:
+      - redis
+    restart: unless-stopped
+    # We want to run 2 instances of the worker
+    deploy:
+      replicas: 2
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  pdf_storage:
+  redis_data:
