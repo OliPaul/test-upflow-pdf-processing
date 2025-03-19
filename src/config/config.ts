@@ -45,12 +45,20 @@ const defaultConfig: AppConfig = {
         },
     },
     metadataStorage: {
-        type: (process.env.METADATA_STORAGE_TYPE as MetadataStorageType) || 'memory',
+        type: (process.env.METADATA_STORAGE_TYPE as MetadataStorageType) || 'redis',
         options: {
-            connectionString: process.env.DB_CONNECTION_STRING,
+            connectionString: process.env.DB_CONNECTION_STRING ||
+                buildRedisUrl(
+                    process.env.REDIS_HOST || 'localhost',
+                    Number(process.env.REDIS_PORT) || 6379
+                ),
         },
     },
 };
+
+function buildRedisUrl(host: string, port: number): string {
+    return `redis://${host}:${port}`;
+}
 
 export function getConfig(): AppConfig {
     return defaultConfig;
